@@ -7,4 +7,10 @@ export const ShopService = {
     findAll: (filter, project = {}) => {
         return ShopModel.find(filter, project);
     },
+    findOne: (filter, project = {}) => {
+        return ShopModel.findOne(filter, project);
+    },
+    create: (data) => {
+        return ShopModel.create(data);
+    },
 }

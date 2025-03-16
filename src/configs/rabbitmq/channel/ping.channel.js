@@ -1,11 +1,11 @@
-import { Logger } from "../../../helpers";
-import { ShopService } from "../../../services";
+import { Logger } from "../../../helpers/index.js";
+import { ShopService } from "../../../services/index.js";
 import { handlePingConsume } from "../consume/ping.consume.js";
 
 export const PingChannel = (function () {
     let channel;
 
-    const initialize = async (conn) => {
+    const initial = async (conn) => {
         try {
             channel = await conn.createChannel();
             await channel.assertExchange('domain', 'direct', { durable: true });
@@ -40,7 +40,7 @@ export const PingChannel = (function () {
     };
 
     return {
-        initialize,
+        initial,
         publish,
         stop,
     };

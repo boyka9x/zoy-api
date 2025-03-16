@@ -1,4 +1,4 @@
-import { Logger } from "../../../helpers";
+import { Logger } from "../../../helpers/index.js";
 
 export const handlePingConsume = async (channel, domain, message) => {
     try {

@@ -6,13 +6,14 @@ import serve from 'koa-static';
 import { userAgent } from 'koa-useragent';
 import path from 'path';
 import { route } from "./routes/index.js";
-import { connectMongoDB } from "./configs/index.js";
+import { connectMongoDB, initRabbit } from "./configs/index.js";
 
 // Environment config
 dotenv.config();
 
 // Connect to MongoDB
 connectMongoDB();
+initRabbit();
 
 const app = new Koa();
 const PORT = process.env.PORT || 5000;
