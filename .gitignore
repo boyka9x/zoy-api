@@ -1,0 +1,9 @@
+node_modules/
+docker/mongodbdata
+docker/rabbitmq
+.env
+.env.test
+
+package-lock.json
+
+src/public/cdn/

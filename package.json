@@ -1,0 +1,36 @@
+{
+    "type": "module",
+    "name": "api_record",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/server.js",
+    "scripts": {
+        "dev": "nodemon src/server.js",
+        "start": "node src/server.js",
+        "build-record": "webpack --config webpack.config.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@koa/cors": "^5.0.0",
+        "@rrweb/types": "^2.0.0-alpha.18",
+        "base64-arraybuffer": "^1.0.2",
+        "dotenv": "^16.4.7",
+        "fflate": "^0.8.2",
+        "jsonwebtoken": "^9.0.2",
+        "koa": "^2.16.0",
+        "koa-bodyparser": "^4.4.1",
+        "koa-compose": "^4.1.0",
+        "koa-router": "^13.0.1",
+        "koa-static": "^5.0.0",
+        "koa-useragent": "^4.1.0",
+        "mongoose": "^8.12.1",
+        "uuid": "^11.1.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.9",
+        "webpack": "^5.98.0",
+        "webpack-cli": "^6.0.1"
+    }
+}
