@@ -7,10 +7,9 @@ export const handlePingConsume = async (channel, domain, message) => {
             return;
         }
 
-        const data = JSON.parse(message.content.toString());
+        const { domain, zoy, body } = JSON.parse(message.content.toString());
 
         console.log(data);
-
 
         channel.ack(message);
     } catch (e) {

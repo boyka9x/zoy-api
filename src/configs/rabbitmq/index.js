@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 
+export * from './channel/ping.channel.js';
+
 export const initRabbit = async () => {
     try {
         const conn = await amqp.connect(process.env.AMQP_URI);

@@ -1,14 +1,15 @@
-import { clientError, Logger } from "../helpers";
-import { ShopService } from "../services";
+import { clientError, Logger } from "../helpers/index.js";
+import { ShopService } from "../services/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const shopController = {
-    register: async (ctx, next) => {
-        const { name, pw, pwConfirm, email, domain } = ctx.request.body;
+    register: async (ctx) => {
+        const { username, pw, pwConfirm, email, domain } = ctx.request.body;
 
         try {
-            if (!name || !pw || !email || !domain) {
+            console.log('ha')
+            if (!username || !pw || !email || !domain) {
                 return clientError(ctx, 400, 'Invalid username or password');
             }
 
@@ -25,7 +26,7 @@ export const shopController = {
             const salt = await bcrypt.genSalt(10);
             const hashPw = await bcrypt.hash(pw, salt);
             await ShopService.create({
-                username: name,
+                username,
                 email,
                 password: hashPw,
                 domain,
@@ -40,7 +41,7 @@ export const shopController = {
             ctx.throw(error.status, error.message);
         }
     },
-    login: async (ctx, next) => {
+    login: async (ctx) => {
         const { email, password } = ctx.request.body;
 
         try {

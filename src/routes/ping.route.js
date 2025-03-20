@@ -6,7 +6,6 @@ const pingRouter = new Router({
     prefix: '/ping'
 });
 
-// pingRouter.post('/', verifyParams, verifyShop, verifyAgent, pingController.create);
-pingRouter.post('/', pingController.create);
+pingRouter.post('/', verifyParams, verifyShop, verifyAgent, pingController.create);
 
 export default pingRouter;

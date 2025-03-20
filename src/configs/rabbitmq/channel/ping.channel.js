@@ -14,24 +14,24 @@ export const PingChannel = (function () {
             const inactiveShops = await ShopService.findAll({ status: false }, { domain: 1 });
 
             for (const shop of activeShops) {
-                await publish(shop.domain);
+                await createQueue(shop.domain);
             }
 
             for (const shop of inactiveShops) {
-                await stop(shop.domain);
+                await deleteQueue(shop.domain);
             }
         } catch (e) {
             Logger.error(__filename, '', `AMQP : ${e.toString()}`);
         }
     };
 
-    const publish = async (domain) => {
+    const createQueue = async (domain) => {
         await channel.assertQueue(domain);
         await channel.bindQueue(domain, 'domain', domain);
         channel.consume(domain, (message) => handlePingConsume(channel, domain, message));
     };
 
-    const stop = async (domain) => {
+    const deleteQueue = async (domain) => {
         try {
             await channel.deleteQueue(domain);
         } catch (e) {
@@ -39,9 +39,12 @@ export const PingChannel = (function () {
         }
     };
 
+    const publish = (domain, message) => {
+        channel.publish('domain', domain, Buffer.from(JSON.stringify(message)));
+    };
+
     return {
         initial,
         publish,
-        stop,
     };
 })();
