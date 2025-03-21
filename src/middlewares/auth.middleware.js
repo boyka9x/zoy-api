@@ -2,7 +2,7 @@ import { AgentHelper } from "../helpers/index.js";
 import { ShopService } from "../services/index.js";
 
 export const verifyParams = async (ctx, next) => {
-    const { _c, _s, _v, _p } = ctx.request.query;
+    const { _c, _s, _v, _p, _href, _w, _h, _t } = ctx.request.query;
 
     if (!_c || !_s || !_v || !_p) {
         ctx.throw(400, 'Invalid params');
@@ -10,10 +10,25 @@ export const verifyParams = async (ctx, next) => {
 
     ctx.state.zoy = {
         code: _c,
-        session: _s,
-        visitor: _v,
-        pageview: _p,
+        sKey: _s,
+        vKey: _v,
+        pKey: _p,
+        href: _href,
+        _w,
+        _h,
+        _t,
     };
+    await next();
+};
+
+export const verifyIp = async (ctx, next) => {
+    const ip = ctx.request.ip;
+
+    if (!ip) {
+        ctx.throw(403, "Forbidden");
+    }
+
+    ctx.state.zoy.ip = ip;
     await next();
 };
 

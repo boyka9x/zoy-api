@@ -12,6 +12,7 @@ const ShopSchema = new Schema({
     session_count: { type: Number, default: 0 },
 }, {
     timestamps: true,
+    versionKey: false,
 });
 
 ShopSchema.index({ email: 1 });

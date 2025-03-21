@@ -1,8 +1,10 @@
 import compose from "koa-compose";
 import pingRouter from "./ping.route.js";
 import shopRouter from "./shop.route.js";
+import sessionRouter from "./session.route.js";
+import eventRouter from "./event.route.js";
 
-const routes = [pingRouter, shopRouter];
+const routes = [pingRouter, shopRouter, sessionRouter, eventRouter];
 
 export const route = (app) => {
     app.use(compose(routes.map(r => r.routes())));

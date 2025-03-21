@@ -11,6 +11,7 @@ const EventSchema = new Schema({
     pageview: { type: Schema.Types.ObjectId, ref: 'pageviews' },
 }, {
     timestamps: false,
+    versionKey: false,
 });
 
 EventSchema.index({ pageview: 1 });

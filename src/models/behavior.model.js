@@ -11,7 +11,8 @@ const BehaviorSchema = new Schema({
     pageview: { type: Schema.Types.ObjectId, ref: 'pageviews' },
     session: { type: Schema.Types.ObjectId, ref: 'sessions' },
 }, {
-    timestamps: false
+    timestamps: false,
+    versionKey: false,
 });
 
 BehaviorSchema.index({ shop: 1 });

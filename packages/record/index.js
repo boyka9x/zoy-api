@@ -8,6 +8,8 @@ const initialRecord = (() => {
         visitor: '',
         pageview: '',
         pingUrl: '',
+        width: document.body.scrollWidth,
+        height: document.body.scrollHeight,
         saving: false,
         block: false,
         events: [],

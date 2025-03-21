@@ -7,7 +7,7 @@ export const VisitorService = {
     updateOne: (id, data) => {
         return VisitorModel.findByIdAndUpdate(id, data);
     },
-    findOne: ({ shopId, visitorKey }) => {
-        return VisitorModel.findOne({ shop: shopId, key: visitorKey });
+    findOne: ({ shopId, key }) => {
+        return VisitorModel.findOne({ shop: shopId, key });
     }
 }

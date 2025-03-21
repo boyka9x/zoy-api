@@ -7,7 +7,7 @@ export const PageviewService = {
     updateOne: (filter, data) => {
         return PageviewModel.updateOne(filter, data);
     },
-    findOne: ({ sessionId, pageviewKey }) => {
-        return PageviewModel.findOne({ session: sessionId, key: pageviewKey });
+    findOne: ({ sessionId, key }) => {
+        return PageviewModel.findOne({ session: sessionId, key });
     }
 }

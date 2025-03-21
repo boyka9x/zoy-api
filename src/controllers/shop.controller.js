@@ -3,7 +3,7 @@ import { ShopService } from "../services/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export const shopController = {
+export const ShopController = {
     register: async (ctx) => {
         const { username, pw, pwConfirm, email, domain } = ctx.request.body;
 

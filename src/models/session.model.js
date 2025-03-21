@@ -11,13 +11,14 @@ const SessionSchema = new Schema({
     location: { type: String },
     ip: { type: String },
     duration: { type: Number, required: false },
-    start_time: { type: String },
-    last_active: { type: Date, required: false },
+    startTime: { type: String },
+    lastActive: { type: Date, required: false },
 
     shop: { type: Schema.Types.ObjectId, ref: 'shops' },
     visitor: { type: Schema.Types.ObjectId, ref: 'visitors' },
 }, {
     timestamps: true,
+    versionKey: false,
 });
 
 SessionSchema.index({ key: 1 });

@@ -35,6 +35,10 @@ export const initPingUrl = (states) => {
         `&_v=${states.visitor}` +
         `&_s=${states.session}` +
         `&_c=${window.ZOY_CODE}` +
+        `&_w=${states.width}` +
+        `&_h=${states.height}` +
+        `&_t=${document.title}` +
+        `&_href=${encodeURIComponent(window.location.href)}` +
         `&domain=${window.location.hostname}`;
 
     states.pingUrl = sessionPingUrl;

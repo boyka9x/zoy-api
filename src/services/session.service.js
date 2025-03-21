@@ -7,7 +7,10 @@ export const SessionService = {
     updateOne: (id, data) => {
         return SessionModel.findByIdAndUpdate(id, data);
     },
-    findOne: ({ shopId, sessionKey }) => {
-        return SessionModel.findOne({ shop: shopId, key: sessionKey });
+    findOne: ({ visitorId, key }) => {
+        return SessionModel.findOne({ visitor: visitorId, key });
+    },
+    find: (filter = {}) => {
+        return SessionModel.find(filter);
     },
 }

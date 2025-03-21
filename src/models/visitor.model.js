@@ -9,11 +9,12 @@ const VisitorSchema = new Schema({
     browser: { type: String },
     location: { type: String },
     ips: [{ type: String }],
-    last_active: { type: Date },
+    lastActive: { type: Date },
 
     shop: { type: Schema.Types.ObjectId, ref: 'shops' },
 }, {
     timestamps: true,
+    versionKey: false,
 });
 
 VisitorSchema.index({ key: 1 });

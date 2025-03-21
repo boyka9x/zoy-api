@@ -8,13 +8,13 @@ const PageviewSchema = new Schema({
     title: { type: String },
     width: { type: Number, required: true, default: 0 },
     height: { type: Number, required: true, default: 0 },
-    start_time: { type: String },
-    end_time: { type: String },
+    startTime: { type: String },
 
     shop: { type: Schema.Types.ObjectId, ref: 'shops' },
     session: { type: Schema.Types.ObjectId, ref: 'sessions' },
 }, {
     timestamps: true,
+    versionKey: false,
 });
 
 PageviewSchema.index({ key: 1 });
