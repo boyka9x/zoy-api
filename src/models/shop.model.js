@@ -10,6 +10,8 @@ const ShopSchema = new Schema({
     status: { type: Boolean, required: true, default: true },
     username: { type: String },
     session_count: { type: Number, default: 0 },
+    shopify_token: { type: String },
+    pixel_id: { type: String },
 }, {
     timestamps: true,
     versionKey: false,
