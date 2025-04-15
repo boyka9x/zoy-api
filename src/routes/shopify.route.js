@@ -5,7 +5,6 @@ const shopifyRouter = new Router({
     prefix: '/api/shopify'
 });
 
-shopifyRouter.get('/auth', ShopifyController.get);
 shopifyRouter.post('/auth', ShopifyController.post);
 
 export default shopifyRouter;
