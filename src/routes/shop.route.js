@@ -6,6 +6,6 @@ const shopRouter = new Router({
 });
 
 shopRouter.post('/', ShopController.register);
-shopRouter.get('/', async (ctx) => ctx.body = 'hi');
+shopRouter.post('/login', ShopController.login);
 
 export default shopRouter;

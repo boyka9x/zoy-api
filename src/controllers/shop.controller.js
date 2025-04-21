@@ -70,11 +70,34 @@ export const ShopController = {
             );
 
             ctx.body = {
-                token: accessToken
+                accessToken: accessToken,
+                email: shop.email,
+                username: shop.username,
+                code: shop.code,
+                session_count: shop.session_count,
             };
         } catch (error) {
             Logger.error(__filename, email, error.message);
             ctx.throw(error.status, error.message);
         }
     },
+    changeModule: async (ctx) => {
+        const { record } = ctx.request.body;
+        const { domain } = ctx.state.shopData;
+
+        try {
+            if (!domain) {
+                return clientError(ctx, 400, 'Invalid domain');
+            }
+
+            await ShopService.updateModule({ domain, data: { 'modules.enableRecord': record } });
+
+            ctx.body = {
+                message: "ok"
+            };
+        } catch (error) {
+            Logger.error(__filename, domain, error.message);
+            ctx.throw(error.status, error.message);
+        }
+    }
 }

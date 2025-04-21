@@ -12,6 +12,9 @@ const ShopSchema = new Schema({
     session_count: { type: Number, default: 0 },
     shopify_token: { type: String },
     pixel_id: { type: String },
+    modules: {
+        enableRecord: { type: Boolean, default: true },
+    },
 }, {
     timestamps: true,
     versionKey: false,
