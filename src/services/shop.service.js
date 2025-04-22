@@ -14,6 +14,6 @@ export const ShopService = {
         return ShopModel.create(data);
     },
     updateModule: ({ domain, data }) => {
-        return ShopModel.updateOne(domain, { $set: data });
+        return ShopModel.updateOne({ domain }, { $set: data });
     },
 }

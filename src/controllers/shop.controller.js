@@ -74,7 +74,7 @@ export const ShopController = {
                 email: shop.email,
                 username: shop.username,
                 code: shop.code,
-                session_count: shop.session_count,
+                domain: shop.domain,
             };
         } catch (error) {
             Logger.error(__filename, email, error.message);
@@ -89,7 +89,6 @@ export const ShopController = {
             if (!domain) {
                 return clientError(ctx, 400, 'Invalid domain');
             }
-
             await ShopService.updateModule({ domain, data: { 'modules.enableRecord': record } });
 
             ctx.body = {
@@ -99,5 +98,26 @@ export const ShopController = {
             Logger.error(__filename, domain, error.message);
             ctx.throw(error.status, error.message);
         }
-    }
+    },
+    getShop: async (ctx) => {
+        const { domain } = ctx.state.shopData;
+
+        try {
+            if (!domain) {
+                return clientError(ctx, 400, 'Invalid domain');
+            }
+
+            const shop = await ShopService.findOne({ domain }, { password: 0, shopify_token: 0, pixel_id: 0 });
+            if (!shop) {
+                return clientError(ctx, 400, 'Invalid domain');
+            }
+
+            ctx.body = {
+                data: shop
+            };
+        } catch (error) {
+            Logger.error(__filename, domain, error.message);
+            ctx.throw(error.status, error.message);
+        }
+    },
 }
