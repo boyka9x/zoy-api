@@ -10,5 +10,6 @@ shopRouter.get('/', verifyToken, ShopController.getShop);
 shopRouter.post('/', ShopController.register);
 shopRouter.post('/login', ShopController.login);
 shopRouter.post('/modules', verifyToken, ShopController.changeModule);
+shopRouter.get('/check-shopify', verifyToken, ShopController.checkShopify);
 
 export default shopRouter;

@@ -120,4 +120,25 @@ export const ShopController = {
             ctx.throw(error.status, error.message);
         }
     },
+    checkShopify: async (ctx) => {
+        const { domain } = ctx.state.shopData;
+
+        try {
+            if (!domain) {
+                return clientError(ctx, 400, 'Invalid domain');
+            }
+
+            const shop = await ShopService.findOne({ domain }, { shopify_domain: 1 });
+            if (!shop) {
+                return clientError(ctx, 400, 'Invalid domain');
+            }
+
+            ctx.body = {
+                data: shop
+            };
+        } catch (error) {
+            Logger.error(__filename, domain, error.message);
+            ctx.throw(error.status, error.message);
+        }
+    },
 }
