@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+import { Aggregate } from "../helpers/index.js";
 import { SessionModel } from "../models/index.js"
 
 export const SessionService = {
@@ -12,5 +14,19 @@ export const SessionService = {
     },
     find: (filter = {}) => {
         return SessionModel.find(filter);
+    },
+    findBuildHM: ({ shopId, lastActive, limit = 100 }) => {
+        return SessionModel.aggregate([
+            Aggregate.match({
+                shop: Types.ObjectId(shopId),
+                hmBuilt: false,
+                lastActive: { $gte: lastActive }
+            }),
+            Aggregate.limit(limit),
+            Aggregate.project({
+                _id: 1,
+                device: 1,
+            }),
+        ]);
     },
 }

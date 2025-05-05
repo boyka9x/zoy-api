@@ -3,3 +3,5 @@ export * from './visitor.model.js';
 export * from './session.model.js';
 export * from './pageview.model.js';
 export * from './event.model.js';
+export * from './click.model.js';
+export * from './move.model.js';

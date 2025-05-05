@@ -7,6 +7,7 @@ import { userAgent } from 'koa-useragent';
 import path from 'path';
 import { route } from "./routes/index.js";
 import { connectMongoDB, initRabbit } from "./configs/index.js";
+import { Auto } from "./auto/index.js";
 
 // Environment config
 dotenv.config();
@@ -44,5 +45,6 @@ app.use(userAgent);
 route(app);
 
 app.listen(PORT, function () {
+    Auto.init();
     console.log(`Server is running on port ${PORT}`);
 });

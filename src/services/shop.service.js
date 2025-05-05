@@ -16,4 +16,34 @@ export const ShopService = {
     updateModule: ({ domain, data }) => {
         return ShopModel.updateOne({ domain }, { $set: data });
     },
+    findBuildHM: () => {
+        return ShopModel.aggregate([
+            Aggregate.match({
+                status: true,
+            }),
+            Aggregate.project({ domain: 1 }),
+            Aggregate.lookup({
+                from: 'sessions',
+                let: { shopId: '$_id' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ['$shop', '$$shopId'] },
+                                    { $eq: ['$hmBuilt', false] },
+                                    { $gte: ['$lastActive', new Date(Date.now() - 30 * 60 * 1000)] }
+                                ]
+                            }
+                        }
+                    },
+                    { $limit: 1 }
+                ],
+                as: 'session'
+            }),
+            Aggregate.match({
+                'session.0': { $exists: true },
+            }),
+        ]);
+    },
 }

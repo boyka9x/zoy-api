@@ -13,6 +13,7 @@ const SessionSchema = new Schema({
     duration: { type: Number, required: false },
     startTime: { type: String },
     lastActive: { type: Date, required: false },
+    hmBuilt: { type: Boolean, required: false, default: false },
 
     shop: { type: Schema.Types.ObjectId, ref: 'shops' },
     visitor: { type: Schema.Types.ObjectId, ref: 'visitors' },

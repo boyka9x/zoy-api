@@ -28,6 +28,25 @@ services:
             RABBITMQ_DEFAULT_PASS: '${RABBITMQ_DEFAULT_PASS}'
         networks:
             - mida_test_1
+
+    redis:
+        image: bitnami/redis:6.2.14
+        container_name: rabbitmq-recorder
+        environment:
+            - REDIS_PASSWORD='${REDIS_PASSWORD}'
+            - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+        ports:
+            - '${REDIS_PORT}:6379'
+        volumes:
+            - redis_data:/bitnami/redis/data
+        restart: always
+        networks:
+            - mida_test_1
+
+volumes:
+    redis_data:
+        driver: local
+
 networks:
     mida_test_1:
         driver: bridge

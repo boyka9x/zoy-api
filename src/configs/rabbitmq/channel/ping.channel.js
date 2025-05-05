@@ -2,6 +2,7 @@ import { Logger } from "../../../helpers/index.js";
 import { ShopService } from "../../../services/index.js";
 import { handlePingConsume } from "../consume/ping.consume.js";
 
+const __filename = import.meta.url;
 export const PingChannel = (function () {
     let channel;
 

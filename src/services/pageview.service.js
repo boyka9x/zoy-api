@@ -9,5 +9,8 @@ export const PageviewService = {
     },
     findOne: ({ sessionId, key }) => {
         return PageviewModel.findOne({ session: sessionId, key });
-    }
+    },
+    findBySessionId: ({ sessionId, limit = 100 }) => {
+        return PageviewModel.find({ session: sessionId }).limit(limit);
+    },
 }
