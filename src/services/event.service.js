@@ -26,5 +26,26 @@ export const EventService = {
             Aggregate.unwind({ path: '$events' }),
             Aggregate.replaceRoot({ newRoot: '$events' })
         ]);
+    },
+    findBuildHM: async ({ pageviewId, hmTime }) => {
+        const filters = {};
+        if (hmTime) {
+            filters.timestamp = { $gt: parseInt(hmTime) };
+        }
+
+        return EventModel.aggregate([
+            Aggregate.match({
+                pageview: convertObjectId(pageviewId),
+                type: 3,
+                hmType: 1,
+                ...filters,
+            }),
+            Aggregate.project({
+                pageview: 0
+            }),
+        ])
+    },
+    findSnapshot: async (pageviewId) => {
+        return EventModel.findOne({ pageview: pageviewId, type: 2 });
     }
 };
