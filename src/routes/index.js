@@ -4,8 +4,9 @@ import shopRouter from "./shop.route.js";
 import sessionRouter from "./session.route.js";
 import eventRouter from "./event.route.js";
 import shopifyRouter from "./shopify.route.js";
+import pageviewRouter from "./pageview.route.js";
 
-const routes = [pingRouter, shopRouter, sessionRouter, eventRouter, shopifyRouter];
+const routes = [pingRouter, shopRouter, sessionRouter, eventRouter, shopifyRouter, pageviewRouter];
 
 export const route = (app) => {
     app.use(compose(routes.map(r => r.routes())));

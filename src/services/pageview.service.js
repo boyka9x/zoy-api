@@ -36,5 +36,49 @@ export const PageviewService = {
             }),
             Aggregate.limit(limit),
         ]);
-    }
+    },
+    listPage: async ({ shopId, from, to, limit = 5, skip = 0 }) => {
+        return PageviewModel.aggregate([
+            Aggregate.match({
+                shop: shopId,
+                createdAt: {
+                    $gte: new Date(from),
+                    $lte: new Date(to),
+                },
+            }),
+            Aggregate.group({
+                _id: { href: '$href', device: '$device' },
+                count: { $sum: 1 },
+            }),
+            Aggregate.group({
+                _id: '$_id.href',
+                counts: { $sum: '$count' },
+                device: { $push: { k: '$_id.device', v: '$count' } },
+            }),
+            Aggregate.sort({ counts: -1 }),
+            Aggregate.skip(skip),
+            Aggregate.limit(limit),
+            Aggregate.project({
+                _id: 0,
+                href: '$_id',
+                counts: 1,
+                device: { $arrayToObject: '$device' },
+            }),
+        ])
+    },
+    countPage: async ({ shopId, from, to }) => {
+        return PageviewModel.aggregate([
+            Aggregate.match({
+                shop: shopId,
+                createdAt: {
+                    $gte: new Date(from),
+                    $lte: new Date(to),
+                },
+            }),
+            Aggregate.group({
+                _id: null,
+                count: { $sum: 1 },
+            }),
+        ]);
+    },
 }
