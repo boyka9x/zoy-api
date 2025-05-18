@@ -21,7 +21,7 @@ export const PageviewService = {
             Aggregate.match({
                 shop: shopId,
                 href: { $regex: href, $options: 'i' },
-                hmTime: { $ne: 1 }
+                // hmTime: { $ne: 1 }
             }),
             Aggregate.lookup({
                 from: 'sessions',
@@ -32,7 +32,7 @@ export const PageviewService = {
             Aggregate.unwind({ path: '$session' }),
             Aggregate.match({
                 'session.device': device,
-                'session.lastActive': { $gte: THIRTY_MINUTES_AGO },
+                // 'session.lastActive': { $gte: THIRTY_MINUTES_AGO },
             }),
             Aggregate.limit(limit),
         ]);
@@ -41,19 +41,28 @@ export const PageviewService = {
         return PageviewModel.aggregate([
             Aggregate.match({
                 shop: shopId,
-                createdAt: {
-                    $gte: new Date(from),
-                    $lte: new Date(to),
-                },
+                // createdAt: {
+                //     $gte: new Date(from),
+                //     $lte: new Date(to),
+                // },
             }),
+            Aggregate.lookup({
+                from: 'sessions',
+                localField: 'session',
+                foreignField: '_id',
+                as: 'session',
+            }),
+            Aggregate.unwind({ path: '$session' }),
             Aggregate.group({
-                _id: { href: '$href', device: '$device' },
+                _id: { href: '$href', device: '$session.device' },
                 count: { $sum: 1 },
+                title: { $first: '$title' }
             }),
             Aggregate.group({
                 _id: '$_id.href',
                 counts: { $sum: '$count' },
                 device: { $push: { k: '$_id.device', v: '$count' } },
+                title: { $first: '$title' }
             }),
             Aggregate.sort({ counts: -1 }),
             Aggregate.skip(skip),
@@ -62,23 +71,25 @@ export const PageviewService = {
                 _id: 0,
                 href: '$_id',
                 counts: 1,
+                title: 1,
                 device: { $arrayToObject: '$device' },
             }),
         ])
     },
     countPage: async ({ shopId, from, to }) => {
+
         return PageviewModel.aggregate([
             Aggregate.match({
                 shop: shopId,
-                createdAt: {
-                    $gte: new Date(from),
-                    $lte: new Date(to),
-                },
+                // createdAt: {
+                //     $gte: new Date(from),
+                //     $lte: new Date(to),
+                // },
             }),
             Aggregate.group({
-                _id: null,
-                count: { $sum: 1 },
+                _id: "$href",
             }),
+            Aggregate.count("count"),
         ]);
     },
 }

@@ -2,6 +2,8 @@ import amqp from 'amqplib';
 import { PingChannel } from './channel/ping.channel.js';
 import { Logger } from '../../helpers/index.js';
 import { fileURLToPath } from 'url';
+import { HeatmapChannel } from './channel/heatmap.channel.js';
+import { ClickChannel } from './channel/click.channel.js';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -11,6 +13,8 @@ export const initRabbit = async () => {
     try {
         const conn = await amqp.connect(process.env.AMQP_URI);
         await PingChannel.initial(conn);
+        await HeatmapChannel.initial(conn);
+        await ClickChannel.initial(conn);
 
         conn.on('error', function (err) {
             Logger.error(__filename, 'AMQP', err.message);

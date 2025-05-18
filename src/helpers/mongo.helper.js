@@ -15,4 +15,5 @@ export const Aggregate = {
     skip: (pipelineStage) => ({ $skip: pipelineStage }),
     merge: (pipelineStage) => ({ $merge: pipelineStage }),
     replaceRoot: (pipelineStage) => ({ $replaceRoot: pipelineStage }),
+    count: (pipelineStage) => ({ $count: pipelineStage }),
 };

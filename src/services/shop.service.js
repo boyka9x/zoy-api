@@ -1,3 +1,4 @@
+import { Aggregate } from "../helpers/mongo.helper.js";
 import { ShopModel } from "../models/index.js"
 
 export const ShopService = {
@@ -22,28 +23,28 @@ export const ShopService = {
                 status: true,
             }),
             Aggregate.project({ domain: 1 }),
-            Aggregate.lookup({
-                from: 'sessions',
-                let: { shopId: '$_id' },
-                pipeline: [
-                    {
-                        $match: {
-                            $expr: {
-                                $and: [
-                                    { $eq: ['$shop', '$$shopId'] },
-                                    { $eq: ['$hmBuilt', false] },
-                                    { $gte: ['$lastActive', new Date(Date.now() - 30 * 60 * 1000)] }
-                                ]
-                            }
-                        }
-                    },
-                    { $limit: 1 }
-                ],
-                as: 'session'
-            }),
-            Aggregate.match({
-                'session.0': { $exists: true },
-            }),
+            // Aggregate.lookup({
+            //     from: 'sessions',
+            //     let: { shopId: '$_id' },
+            //     pipeline: [
+            //         {
+            //             $match: {
+            //                 $expr: {
+            //                     $and: [
+            //                         { $eq: ['$shop', '$$shopId'] },
+            //                         { $eq: ['$hmBuilt', false] },
+            //                         { $gte: ['$lastActive', new Date(Date.now() - 30 * 60 * 1000)] }
+            //                     ]
+            //                 }
+            //             }
+            //         },
+            //         { $limit: 1 }
+            //     ],
+            //     as: 'session'
+            // }),
+            // Aggregate.match({
+            //     'session.0': { $exists: true },
+            // }),
         ]);
     },
 }

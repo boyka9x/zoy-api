@@ -5,8 +5,9 @@ import sessionRouter from "./session.route.js";
 import eventRouter from "./event.route.js";
 import shopifyRouter from "./shopify.route.js";
 import pageviewRouter from "./pageview.route.js";
+import clickRouter from "./click.route.js";
 
-const routes = [pingRouter, shopRouter, sessionRouter, eventRouter, shopifyRouter, pageviewRouter];
+const routes = [pingRouter, shopRouter, sessionRouter, eventRouter, shopifyRouter, pageviewRouter, clickRouter];
 
 export const route = (app) => {
     app.use(compose(routes.map(r => r.routes())));

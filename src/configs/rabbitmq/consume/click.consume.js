@@ -28,6 +28,6 @@ export const handleSaveClick = async (channel, message) => {
         channel.ack(message);
     } catch (error) {
         console.error('Error processing message:', error);
-        channel.nack(message);
+        channel.nack(message, false, false);
     }
 }

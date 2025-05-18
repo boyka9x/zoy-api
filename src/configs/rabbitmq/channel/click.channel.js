@@ -1,9 +1,9 @@
-import { handleSaveClick } from "../consume/click.consume";
+import { handleSaveClick } from "../consume/click.consume.js";
 
 export const ClickChannel = (() => {
     let channel;
 
-    const init = async (conn) => {
+    const initial = async (conn) => {
         try {
             channel = await conn.createChannel();
 
@@ -16,12 +16,12 @@ export const ClickChannel = (() => {
         }
     }
 
-    const publish = (message) => {
+    const publish = async (message) => {
         channel.sendToQueue('click', Buffer.from(JSON.stringify(message)), { persistent: true });
     }
 
     return {
-        init,
+        initial,
         publish,
     };
 })();

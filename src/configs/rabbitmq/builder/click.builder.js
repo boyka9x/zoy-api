@@ -1,5 +1,6 @@
 import { SnapshotHelper } from "../../../helpers/index.js";
 import { ClickService, PageviewService } from "../../../services/index.js";
+import { ClickChannel } from "../channel/click.channel.js";
 import { EventBuilder } from "./event.builder.js";
 
 export const initClickBuilder = ({ device, pageview }) => {
@@ -50,6 +51,7 @@ export const initClickBuilder = ({ device, pageview }) => {
         }
 
         if (click.points.length >= 100) {
+            await ClickChannel.publish(click);
             await PageviewService.updateOne({ _id: pageview._id }, { hmTime: timestamp });
             click.points = []
         }
@@ -68,6 +70,7 @@ export const initClickBuilder = ({ device, pageview }) => {
         }
 
         if (click.points.length) {
+            await ClickChannel.publish(click);
             click.points = [];
         }
     }

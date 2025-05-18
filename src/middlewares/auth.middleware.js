@@ -21,6 +21,7 @@ export const verifyToken = async (ctx, next) => {
         ctx.state.shopData = shop;
         await next();
     } catch (err) {
+        console.log(err)
         ctx.throw(401, 'Unauthorized');
     }
 }

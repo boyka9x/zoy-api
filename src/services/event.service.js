@@ -27,7 +27,7 @@ export const EventService = {
             Aggregate.replaceRoot({ newRoot: '$events' })
         ]);
     },
-    findBuildHM: async ({ pageviewId, hmTime }) => {
+    findBuildHM: ({ pageviewId, hmTime }) => {
         const filters = {};
         if (hmTime) {
             filters.timestamp = { $gt: parseInt(hmTime) };
@@ -35,7 +35,7 @@ export const EventService = {
 
         return EventModel.aggregate([
             Aggregate.match({
-                pageview: convertObjectId(pageviewId),
+                pageview: pageviewId,
                 type: 3,
                 hmType: 1,
                 ...filters,

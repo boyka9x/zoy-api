@@ -21,6 +21,30 @@ const searchParentNode = (childId, root) => {
     return null;
 }
 
+const getNodeTextContent = (node) => {
+    // Base case: text node
+    if (node.type === 3) {
+        let textNode = node.textContent || '';
+        if (textNode) {
+            textNode = textNode.trim().replace(/\s+/g, ' ').slice(0, TEXT_CONTENT_MAX_LENGTH);
+        }
+        return textNode;
+    }
+
+    // Recursive case: element node with children
+    let text = '';
+    if (node.childNodes) {
+        for (const child of node.childNodes) {
+            text += getNodeTextContent(child);
+            text = text.trim().replace(/\s+/g, ' ');
+            if (text.length >= TEXT_CONTENT_MAX_LENGTH) {
+                return text.slice(0, TEXT_CONTENT_MAX_LENGTH);
+            }
+        }
+    }
+
+    return text;
+}
 
 export const SnapshotHelper = {
     searchNode: (key, tree) => {

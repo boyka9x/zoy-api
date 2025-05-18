@@ -18,9 +18,12 @@ export const SessionService = {
     findBuildHM: ({ shopId, lastActive, limit = 100 }) => {
         return SessionModel.aggregate([
             Aggregate.match({
-                shop: Types.ObjectId(shopId),
-                hmBuilt: false,
-                lastActive: { $gte: lastActive }
+                shop: new Types.ObjectId(shopId),
+                lastActive: { $lt: lastActive },
+                $or: [
+                    { hmBuilt: { $exists: false } },
+                    { hmBuilt: false }
+                ]
             }),
             Aggregate.limit(limit),
             Aggregate.project({

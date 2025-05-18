@@ -1,3 +1,4 @@
+import { HeatmapChannel } from "../configs/rabbitmq/channel/heatmap.channel.js";
 import { Logger } from "../helpers/index.js";
 import { ShopService } from "../services/index.js";
 import { RedisService } from "../services/redis.service.js";
@@ -10,10 +11,10 @@ export const HeatmapAuto = {
             const shopCursor = ShopService.findBuildHM().cursor();
 
             await shopCursor.eachAsync(async (shop) => {
-                const shopInQueue = RedisService.get(`heatmap:shop:${shop._id}`);
+                const shopInQueue = await RedisService.get(`heatmap:shop:${shop._id}`);
                 if (!shopInQueue) {
                     await RedisService.set(`heatmap:shop:${shop._id}`, 'true', { EX: 60 * 60 * 24 });
-                    await HeatmapChannel.publish({
+                    HeatmapChannel.publish({
                         shopId: shop._id,
                         domain: shop.domain,
                     });

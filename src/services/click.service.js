@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { Aggregate } from "../helpers/mongo.helper.js";
 import { ClickModel, PageviewModel } from "../models/index.js";
 
@@ -9,10 +10,10 @@ export const ClickService = {
         for (const point of points) {
             const { counts, ...data } = point;
             const filter = {
-                pageview: data.pageview,
+                pageview: new Types.ObjectId(data.pageview),
                 x: data.x,
                 y: data.y,
-                query: data.query,
+                selector: data.selector,
                 textContent: data.textContent,
             };
             if (data?.type) {
@@ -31,11 +32,11 @@ export const ClickService = {
         return PageviewModel.aggregate([
             Aggregate.match({
                 shop: shopId,
-                href: { $regex: page, $options: 'i' },
-                createdAt: {
-                    $gte: new Date(from),
-                    $lt: new Date(to)
-                },
+                href: page,
+                // createdAt: {
+                //     $gte: new Date(from),
+                //     $lt: new Date(to)
+                // },
                 ...(type ? { type } : {}),
             }),
             Aggregate.lookup({

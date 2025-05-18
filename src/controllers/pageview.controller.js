@@ -18,24 +18,16 @@ export const PageviewController = {
             });
 
             const total = await PageviewService.countPage({
-                shop: shopId,
+                shopId,
                 from,
                 to,
             });
 
             ctx.body = {
-                data: [{
-                    href: "/home",
-                    counts: 120,
-                    device: {
-                        desktop: 80,
-                        mobile: 35,
-                        tablet: 5
-                    }
-                }],
+                data: pageviews,
                 page: _page,
                 limit: _limit,
-                total: total[0]?.total || 0,
+                total: total[0]?.count || 0,
             };
         } catch (error) {
             ctx.throw(error.status, error.message);

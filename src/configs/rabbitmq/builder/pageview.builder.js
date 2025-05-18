@@ -32,7 +32,12 @@ export const PageviewBuilder = {
                     });
 
                     await eventCursor.eachAsync(async (events) => {
-                        await ClickBuilder.process(events, snapshot);
+                        for (const event of events) {
+                            console.log(event)
+                            await ClickBuilder.process(event, snapshot);
+                        }
+                    }, {
+                        batchSize: 100,
                     });
 
                     await eventCursor.close();
@@ -41,7 +46,7 @@ export const PageviewBuilder = {
                 }
             } while (pageviews.length === 100);
 
-            await SessionService.updateOne(sessionId, { hmBuilt: true })
+            await SessionService.updateOne(sessionId, { hmBuilt: true });
         } catch (error) {
             console.error('PageviewBuilder', error.message);
         }
@@ -76,18 +81,23 @@ export const PageviewBuilder = {
                         batchSize: 100,
                     });
 
-                    let timeHM;
+                    let hmTime;
                     await eventCursor.eachAsync(async (events) => {
-                        await ClickBuilder.process(events, snapshot);
+                        for (const event of events) {
+                            if (!hmTime || hmTime < event.timestamp) {
+                                hmTime = event.timestamp;
+                            }
+                            await ClickBuilder.process(event, snapshot);
+                        }
+                    }, {
+                        batchSize: 100,
                     });
 
                     await eventCursor.close();
                     await ClickBuilder.endRealtime();
-                    await PageviewService.updateOne({ _id: pageview._id }, { hmTime: 1 });
+                    await PageviewService.updateOne({ _id: pageview._id }, { hmTime });
                 }
             } while (pageviews.length === 100);
-
-            await SessionService.updateOne(sessionId, { hmBuilt: true })
         } catch (error) {
             console.error('PageviewBuilder', error.message);
         }

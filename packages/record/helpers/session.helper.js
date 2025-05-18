@@ -85,8 +85,13 @@ export const saveEvents = (recordState) => {
             .then((response) => {
                 return response.json();
             })
-            .then((json) => {
-                recordState.block = json.block;
+            .then((data) => {
+                if (data.status === 'error') {
+                    recordState.block = true;
+                    return;
+
+                }
+                recordState.block = data.block;
             })
             .catch((err) => {
                 recordState.block = true;
@@ -125,8 +130,13 @@ export const saveBeaconEvents = (recordState) => {
         }),
     })
         .then((res) => res.json())
-        .then((json) => {
-            recordState.block = json.block;
+        .then((data) => {
+            if (data.status === 'error') {
+                recordState.block = true;
+                return;
+
+            }
+            recordState.block = data.block;
         })
         .catch((err) => {
             recordState.block = true;

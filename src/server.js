@@ -12,10 +12,6 @@ import { Auto } from "./auto/index.js";
 // Environment config
 dotenv.config();
 
-// Connect to MongoDB
-connectMongoDB();
-initRabbit();
-
 const app = new Koa();
 const PORT = process.env.PORT || 5000;
 
@@ -44,7 +40,9 @@ app.use(userAgent);
 // Init routes
 route(app);
 
-app.listen(PORT, function () {
+app.listen(PORT, async function () {
+    await connectMongoDB();
+    await initRabbit();
     Auto.init();
     console.log(`Server is running on port ${PORT}`);
 });

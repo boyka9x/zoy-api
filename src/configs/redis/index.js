@@ -1,5 +1,6 @@
 import { Logger } from "../../helpers/index.js";
 import { createClient } from "redis";
+import 'dotenv/config';
 
 const __filename = import.meta.url;
 
