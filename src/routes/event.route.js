@@ -6,5 +6,6 @@ const eventRouter = new Router({
 });
 
 eventRouter.get('/', EventController.find);
+eventRouter.post('/snapshot', EventController.findSnapshot);
 
 export default eventRouter;

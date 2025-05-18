@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { Aggregate } from "../helpers/mongo.helper.js";
 import { PageviewModel } from "../models/index.js"
 
@@ -90,6 +91,26 @@ export const PageviewService = {
                 _id: "$href",
             }),
             Aggregate.count("count"),
+        ]);
+    },
+    findLast: async ({ shopId, href, device }) => {
+        return PageviewModel.aggregate([
+            Aggregate.match({
+                shop: new Types.ObjectId(shopId),
+                href
+            }),
+            Aggregate.lookup({
+                from: 'sessions',
+                localField: 'session',
+                foreignField: '_id',
+                as: 'session',
+            }),
+            Aggregate.unwind({ path: '$session' }),
+            Aggregate.match({
+                'session.device': device,
+            }),
+            Aggregate.sort({ createdAt: -1 }),
+            Aggregate.limit(1),
         ]);
     },
 }

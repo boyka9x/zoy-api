@@ -32,5 +32,5 @@ export const PageviewController = {
         } catch (error) {
             ctx.throw(error.status, error.message);
         }
-    }
+    },
 }
