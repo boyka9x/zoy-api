@@ -1,5 +1,6 @@
 import { Logger } from "../../../helpers/index.js";
 import { EventService, PageviewService, SessionService, ShopService, VisitorService } from "../../../services/index.js";
+import { SessionHelper } from "../../../helpers/index.js";
 
 const __filename = import.meta.url;
 
@@ -12,7 +13,7 @@ export const handlePingConsume = async (channel, domain, message) => {
         }
 
         const { domain, zoy, body } = JSON.parse(message.content.toString());
-        const { events } = body;
+        const { events, source } = body;
         if (!events || events.length === 0) {
             channel.ack(message);
             return;
@@ -68,6 +69,7 @@ export const handlePingConsume = async (channel, domain, message) => {
                 shop: shopId,
                 key: sKey,
                 visitor: visitor._id,
+                source: SessionHelper.getSourceInfo(source),
             })
         } else {
             await SessionService.updateOne(session._id, {

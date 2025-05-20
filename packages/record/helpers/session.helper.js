@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
-import { HOTA_BODY, SESSION_FIRST_PING, SESSION_KEY, SESSION_LAST_ACTIVE } from "../constants/record.constant";
-import { encodeBody, getLocalStorage } from "./common.helper";
+import { HOTA_BODY, SESSION_FIRST_PING, SESSION_KEY, SESSION_LAST_ACTIVE, SOURCE_KEY } from "../constants/record.constant";
+import { encodeBody, getLocalStorage, setLocalStorage } from "./common.helper";
 import { SERVER_URL } from "../constants/host.constant";
 
 export const createNewSession = () => {
@@ -9,6 +9,7 @@ export const createNewSession = () => {
     localStorage.setItem(SESSION_KEY, value);
     sessionStorage.setItem(SESSION_FIRST_PING, 'true');
     localStorage.setItem(SESSION_LAST_ACTIVE, Date.now());
+    localStorage.setItem(SOURCE_KEY, "zoy");
 
     return value;
 };
@@ -71,6 +72,10 @@ export const saveEvents = (recordState) => {
         }
 
         recordState.events.splice(0, events.length);
+        const source = getLocalStorage(SOURCE_KEY);
+        if (source === "zoy") {
+            setLocalStorage(SOURCE_KEY, "null");
+        }
         // Ping session events to server
         fetch(recordState.pingUrl, {
             method: 'POST',
@@ -80,6 +85,7 @@ export const saveEvents = (recordState) => {
             },
             body: encodeBody({
                 events,
+                source: source === "zoy" ? recordState.source : null,
             }),
         })
             .then((response) => {

@@ -2,6 +2,13 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+const SOURCE_TYPES = {
+    ORGANIC: 'organic',
+    DIRECT: 'direct',
+    REFERRED: 'referred',
+    PAID: 'paid',
+};
+
 const SessionSchema = new Schema({
     key: { type: String, required: true },
     viewed: { type: Boolean, required: true, default: false },
@@ -14,6 +21,10 @@ const SessionSchema = new Schema({
     startTime: { type: String },
     lastActive: { type: Date, required: false },
     hmBuilt: { type: Boolean, required: false, default: false },
+    source: {
+        url: { type: String },
+        type: { type: String, default: null },
+    },
 
     shop: { type: Schema.Types.ObjectId, ref: 'shops' },
     visitor: { type: Schema.Types.ObjectId, ref: 'visitors' },

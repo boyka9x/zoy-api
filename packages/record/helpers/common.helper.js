@@ -14,3 +14,16 @@ export const encodeBody = (data) => {
     const jsonString = JSON.stringify(data);
     return gzipSync(strToU8(jsonString));
 };
+
+export const getReferrer = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmSource = urlParams.get('utm_source');
+    const utmMedium = urlParams.get('utm_medium');
+    const utmCampaign = urlParams.get('utm_campaign');
+
+    if (utmSource || utmMedium || utmCampaign) {
+        return `utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}`;
+    }
+
+    return window.frames.top.document.referrer
+};
