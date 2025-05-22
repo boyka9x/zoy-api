@@ -7,5 +7,6 @@ const sessionRouter = new Router({
 });
 
 sessionRouter.get('/', verifyToken, SessionController.findAll);
+sessionRouter.get('/last-24h', verifyToken, SessionController.countLast24H);
 
 export default sessionRouter;

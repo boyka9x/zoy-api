@@ -1,5 +1,5 @@
 import { clientError, Logger } from "../helpers/index.js";
-import { ShopService } from "../services/index.js";
+import { PricingService, ShopService } from "../services/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -135,6 +135,35 @@ export const ShopController = {
 
             ctx.body = {
                 data: shop
+            };
+        } catch (error) {
+            Logger.error(__filename, domain, error.message);
+            ctx.throw(error.status, error.message);
+        }
+    },
+    subPricing: async (ctx) => {
+        const { domain } = ctx.state.shopData;
+        const { code } = ctx.request.body;
+
+        try {
+            if (!domain || !code) {
+                return clientError(ctx, 400, 'Invalid');
+            }
+
+            const shop = await ShopService.findOne({ domain });
+            if (!shop) {
+                return clientError(ctx, 400, 'Invalid domain');
+            }
+
+            const plan = await PricingService.findOne({ code });
+            if (!plan) {
+                return clientError(ctx, 400, 'Invalid domain');
+            }
+
+            await ShopService.updatePricing({ domain, pricing: plan });
+
+            ctx.body = {
+                message: 'Sub pricing success'
             };
         } catch (error) {
             Logger.error(__filename, domain, error.message);

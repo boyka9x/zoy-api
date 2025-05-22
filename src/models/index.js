@@ -5,3 +5,4 @@ export * from './pageview.model.js';
 export * from './event.model.js';
 export * from './click.model.js';
 export * from './move.model.js';
+export * from './pricing.model.js';

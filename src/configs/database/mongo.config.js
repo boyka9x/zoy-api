@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { PricingConfig } from "../pricing/index.js";
 
 export const connectMongoDB = async () => {
     try {
@@ -7,6 +8,8 @@ export const connectMongoDB = async () => {
                 ignoreUndefined: true,
             }
         );
+
+        await PricingConfig.init();
         console.log('Connected to MongoDB');
     } catch (error) {
         console.log('Failed to connect MongoDB', error.message);

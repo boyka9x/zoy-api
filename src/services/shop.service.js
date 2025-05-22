@@ -47,4 +47,10 @@ export const ShopService = {
             // }),
         ]);
     },
+    updatePricing: ({ domain, pricing }) => {
+        return ShopModel.updateOne({ domain }, { pricing });
+    },
+    updateOne: (filter, update) => {
+        return ShopModel.updateOne(filter, update);
+    },
 }

@@ -71,6 +71,10 @@ export const handlePingConsume = async (channel, domain, message) => {
                 visitor: visitor._id,
                 source: SessionHelper.getSourceInfo(source),
             })
+
+            await ShopService.updateOne({ _id: shopId }, {
+                $inc: { session_count: 1 }
+            });
         } else {
             await SessionService.updateOne(session._id, {
                 duration: (lastActive - session.startTime) / 1000,
