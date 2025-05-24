@@ -1,5 +1,6 @@
 import { AgentHelper } from "../helpers/index.js";
 import { ShopService } from "../services/index.js";
+import geoip from 'geoip-lite';
 
 export const verifyParams = async (ctx, next) => {
     const { _c, _s, _v, _p, _href, _w, _h, _t } = ctx.request.query;
@@ -22,13 +23,24 @@ export const verifyParams = async (ctx, next) => {
 };
 
 export const verifyIp = async (ctx, next) => {
-    const ip = ctx.request.ip;
+    const xForwardedFor = ctx.request.headers['x-forwarded-for'];
+    const ip =
+        typeof xForwardedFor === 'string'
+            ? xForwardedFor.split(',')[0].trim()
+            : ctx.request.ip || ctx.req.socket?.remoteAddress;
 
     if (!ip) {
         ctx.throw(403, "Forbidden");
     }
 
+    let location = 'VN';
+    if (ip !== '::1' || ip !== '127.0.0.1') {
+        const geo = geoip.lookup(ip);
+        location = geo ? geo.country : 'VN';
+    }
+
     ctx.state.zoy.ip = ip;
+    ctx.state.zoy.location = location;
     await next();
 };
 

@@ -8,5 +8,6 @@ const sessionRouter = new Router({
 
 sessionRouter.get('/', verifyToken, SessionController.findAll);
 sessionRouter.get('/last-24h', verifyToken, SessionController.countLast24H);
+sessionRouter.post('/by-ids', verifyToken, SessionController.getByIds);
 
 export default sessionRouter;

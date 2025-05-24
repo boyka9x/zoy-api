@@ -109,7 +109,7 @@ export const PageviewService = {
             Aggregate.match({
                 'session.device': device,
             }),
-            Aggregate.sort({ createdAt: -1 }),
+            Aggregate.sort({ _id: -1 }),
             Aggregate.limit(1),
         ]);
     },

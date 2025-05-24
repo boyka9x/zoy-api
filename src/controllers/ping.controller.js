@@ -4,7 +4,7 @@ import { Logger } from "../helpers/index.js";
 const __filename = import.meta.url;
 
 export const pingController = {
-    create: async (ctx, next) => {
+    create: async (ctx) => {
         const { domain } = ctx.state.shopData;
 
         try {

@@ -60,14 +60,18 @@ export const ClickService = {
                 pipeline: [Aggregate.match(filterType)],
             }),
             Aggregate.unwind('$click'),
+            Aggregate.addFields({
+                'click.sessionId': '$session._id',
+            }),
             { $replaceRoot: { newRoot: '$click' } },
             Aggregate.project({
                 _id: 1,
-                query: 1,
+                selector: 1,
                 textContent: 1,
                 x: 1,
                 y: 1,
                 counts: 1,
+                sessionId: 1,
             }),
         ]);
     }

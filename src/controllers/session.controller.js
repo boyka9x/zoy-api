@@ -39,5 +39,24 @@ export const SessionController = {
             Logger.error(__filename, domain, error.message);
             ctx.throw(error.status, error.message);
         }
+    },
+    getByIds: async (ctx) => {
+        const { _id, domain } = ctx.state.shopData;
+        const { ids } = ctx.request.body;
+
+        try {
+            if (!ids) {
+                ctx.throw(400, 'Ids are required');
+            }
+
+            const sessions = await SessionService.find({ shop: _id, _id: { $in: ids } }, { skip: 0, limit: 10 });
+
+            ctx.body = {
+                data: sessions
+            }
+        } catch (error) {
+            Logger.error(__filename, domain, error.message);
+            ctx.throw(error.status, error.message);
+        }
     }
 };

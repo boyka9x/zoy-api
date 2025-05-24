@@ -20,9 +20,9 @@ export const handlePingConsume = async (channel, domain, message) => {
         }
 
         const shop = await ShopService.findByDomain(domain);
-        const { _id: shopId, session_count } = shop;
+        const { _id: shopId, session_count, pricing } = shop;
 
-        if (!shopId) {
+        if (!shopId || session_count >= pricing.session_limit) {
             channel.ack(message);
             return;
         }
@@ -65,11 +65,12 @@ export const handlePingConsume = async (channel, domain, message) => {
             session = await SessionService.create({
                 ...sessionData,
                 startTime,
-                duration: (lastActive - startTime) / 1000,
+                duration: Math.round((lastActive - startTime) / 1000),
                 shop: shopId,
                 key: sKey,
                 visitor: visitor._id,
                 source: SessionHelper.getSourceInfo(source),
+                location: zoy.location || 'VN',
             })
 
             await ShopService.updateOne({ _id: shopId }, {
@@ -77,7 +78,7 @@ export const handlePingConsume = async (channel, domain, message) => {
             });
         } else {
             await SessionService.updateOne(session._id, {
-                duration: (lastActive - session.startTime) / 1000,
+                duration: Math.round((lastActive - session.startTime) / 1000),
             });
         }
 

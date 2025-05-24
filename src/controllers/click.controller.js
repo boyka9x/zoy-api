@@ -28,7 +28,6 @@ export const ClickController = {
                 data: clicks,
             }
         } catch (error) {
-            console.log(error)
             ctx.throw(error.status, error.message);
         }
     },

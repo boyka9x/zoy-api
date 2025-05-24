@@ -23,12 +23,12 @@ export const EventController = {
         const { shopId, page, device } = ctx.request.body;
 
         try {
-            const pageview = await PageviewService.findLast({ shopId, href: page, device });
-            if (!pageview) {
+            const pageview = await PageviewService.findLast({ shopId, href: page, device: 'Desktop' });
+            if (!pageview || !pageview[0]?._id) {
                 ctx.throw(404, "Pageview not found");
             }
 
-            const events = await EventService.findSnapshot(pageview._id);
+            const events = await EventService.findSnapshot(pageview[0]._id);
             if (!events) {
                 ctx.throw(404, "Events not found");
             }

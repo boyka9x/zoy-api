@@ -25,8 +25,12 @@ export const SessionHelper = {
     getSourceInfo: (source) => {
         let sourceInfo = {
             type: null,
-            url: source,
+            url: source || null,
         };
+
+        if (!source) {
+            return sourceInfo;
+        }
 
         if (source?.include('utm_source=')) {
             return {
