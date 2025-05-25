@@ -3,9 +3,9 @@ import { ShopService } from "../services/index.js";
 import geoip from 'geoip-lite';
 
 export const verifyParams = async (ctx, next) => {
-    const { _c, _s, _v, _p, _href, _w, _h, _t } = ctx.request.query;
+    const { _c, _s, _v, _p, _href, _w, _h, _t, domain, _px } = ctx.request.query;
 
-    if (!_c || !_s || !_v || !_p) {
+    if (!_s || !_v || !_p) {
         ctx.throw(400, 'Invalid params');
     }
 
@@ -15,9 +15,11 @@ export const verifyParams = async (ctx, next) => {
         vKey: _v,
         pKey: _p,
         href: _href,
+        domain,
         _w,
         _h,
         _t,
+        isPixel: _px,
     };
     await next();
 };
@@ -73,6 +75,10 @@ export const verifyAgent = async (ctx, next) => {
 
 export const verifyQuota = async (ctx, next) => {
     const { zoy, shopData } = ctx.state;
+
+    if (zoy.domain) {
+        return await next();
+    }
 
     if (zoy.code !== shopData.code) {
         ctx.throw(401, "Invalid code");

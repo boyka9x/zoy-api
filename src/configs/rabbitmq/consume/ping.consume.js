@@ -1,5 +1,5 @@
 import { Logger } from "../../../helpers/index.js";
-import { EventService, PageviewService, SessionService, ShopService, VisitorService } from "../../../services/index.js";
+import { BehaviorService, EventService, PageviewService, SessionService, ShopService, VisitorService } from "../../../services/index.js";
 import { SessionHelper } from "../../../helpers/index.js";
 
 const __filename = import.meta.url;
@@ -27,7 +27,7 @@ export const handlePingConsume = async (channel, domain, message) => {
             return;
         }
 
-        const { sKey, vKey, pKey, os, device, browser, ip, href, _w, _h, _t } = zoy;
+        const { sKey, vKey, pKey, os, device, browser, ip, href, _w, _h, _t, isPixel } = zoy;
         const startTime = events[0].timestamp;
         const lastActive = events[events.length - 1].timestamp;
 
@@ -97,6 +97,17 @@ export const handlePingConsume = async (channel, domain, message) => {
         }
 
         await EventService.createMany({ pageviewId: pageview._id, events });
+        if (isPixel) {
+            const behaviors = events.map(event => ({
+                type: event.data.tag,
+                data: event.data.payload || {},
+                timestamp: event.timestamp,
+                pageview: pageview._id,
+                session: session._id,
+                shop: shopId,
+            }));
+            await BehaviorService.createMany(behaviors);
+        }
         channel.ack(message);
     } catch (e) {
         Logger.error(__filename, domain, e);

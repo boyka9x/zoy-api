@@ -128,7 +128,7 @@ export const ShopController = {
                 return clientError(ctx, 400, 'Invalid domain');
             }
 
-            const shop = await ShopService.findOne({ domain }, { shopify_domain: 1 });
+            const shop = await ShopService.findOne({ domain }, { shopify_domain: 1, pixel_id: 1 });
             if (!shop) {
                 return clientError(ctx, 400, 'Invalid domain');
             }
@@ -164,6 +164,25 @@ export const ShopController = {
 
             ctx.body = {
                 message: 'Sub pricing success'
+            };
+        } catch (error) {
+            Logger.error(__filename, domain, error.message);
+            ctx.throw(error.status, error.message);
+        }
+    },
+    integration: async (ctx) => {
+        const { _id: shopId, domain } = ctx.state.shopData;
+        const { shopify_domain } = ctx.request.body;
+
+        try {
+            if (!domain || !shopify_domain) {
+                return clientError(ctx, 400, 'Invalid data');
+            }
+
+            await ShopService.updateIntegration({ shopId, shopify_domain });
+
+            ctx.body = {
+                message: 'Integration success'
             };
         } catch (error) {
             Logger.error(__filename, domain, error.message);

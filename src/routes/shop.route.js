@@ -12,5 +12,6 @@ shopRouter.post('/login', ShopController.login);
 shopRouter.post('/modules', verifyToken, ShopController.changeModule);
 shopRouter.get('/check-shopify', verifyToken, ShopController.checkShopify);
 shopRouter.post('/sub-pricing', verifyToken, ShopController.subPricing);
+shopRouter.post('/update-integration', verifyToken, ShopController.integration);
 
 export default shopRouter;

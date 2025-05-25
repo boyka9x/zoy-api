@@ -18,3 +18,5 @@ const BehaviorSchema = new Schema({
 BehaviorSchema.index({ shop: 1 });
 BehaviorSchema.index({ pageview: 1 });
 BehaviorSchema.index({ session: 1 });
+
+export const BehaviorModel = mongoose.model('behaviors', BehaviorSchema);

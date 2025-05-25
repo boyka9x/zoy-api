@@ -53,4 +53,7 @@ export const ShopService = {
     updateOne: (filter, update) => {
         return ShopModel.updateOne(filter, update);
     },
+    updateIntegration: ({ shopId, shopify_domain }) => {
+        return ShopModel.updateOne({ _id: shopId }, { $set: { shopify_domain } });
+    },
 }

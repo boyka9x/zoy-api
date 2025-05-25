@@ -7,3 +7,4 @@ export * from './event.service.js';
 export * from './redis.service.js';
 export * from './click.service.js';
 export * from './pricing.service.js';
+export * from './shopify.service.js';
