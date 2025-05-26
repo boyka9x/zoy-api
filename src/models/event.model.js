@@ -15,5 +15,6 @@ const EventSchema = new Schema({
 });
 
 EventSchema.index({ pageview: 1 });
+EventSchema.index({ timestamp: 1 });
 
 export const EventModel = mongoose.model('events', EventSchema);

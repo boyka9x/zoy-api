@@ -20,7 +20,7 @@ export const handlePingConsume = async (channel, domain, message) => {
         }
 
         const shop = await ShopService.findByDomain(domain);
-        const { _id: shopId, session_count, pricing } = shop;
+        const { _id: shopId, session_count, pricing, count_visitors = 0 } = shop;
 
         if (!shopId || session_count >= pricing.session_limit) {
             channel.ack(message);
@@ -44,7 +44,13 @@ export const handlePingConsume = async (channel, domain, message) => {
                 ...visitorData,
                 shop: shopId,
                 key: vKey,
-                ips: [ip]
+                ips: [ip],
+                display_id: count_visitors + 1,
+                location: zoy.location || 'VN',
+            });
+
+            await ShopService.updateOne({ _id: shopId }, {
+                $inc: { count_visitors: 1 }
             });
         } else {
             await VisitorService.updateOne(visitor._id, {

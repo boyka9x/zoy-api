@@ -23,6 +23,7 @@ const ShopSchema = new Schema({
         price: { type: Number, default: 0 },
         session_limit: { type: Number, default: 0 },
     },
+    count_visitors: { type: Number, default: 0 },
 }, {
     timestamps: true,
     versionKey: false,

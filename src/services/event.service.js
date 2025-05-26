@@ -24,7 +24,8 @@ export const EventService = {
                 as: 'events',
             }),
             Aggregate.unwind({ path: '$events' }),
-            Aggregate.replaceRoot({ newRoot: '$events' })
+            Aggregate.replaceRoot({ newRoot: '$events' }),
+            Aggregate.sort({ timestamp: 1 }),
         ]);
     },
     findBuildHM: ({ pageviewId, hmTime }) => {

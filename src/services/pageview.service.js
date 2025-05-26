@@ -113,4 +113,22 @@ export const PageviewService = {
             Aggregate.limit(1),
         ]);
     },
+    getTopPages: async ({ shopId, limit = 5 }) => {
+        return PageviewModel.aggregate([
+            Aggregate.match({ shop: shopId }),
+            Aggregate.group({
+                _id: "$href",
+                counts: { $sum: 1 },
+                title: { $first: "$title" }
+            }),
+            Aggregate.sort({ counts: -1 }),
+            Aggregate.limit(limit),
+            Aggregate.project({
+                _id: 0,
+                href: "$_id",
+                counts: 1,
+                title: 1
+            })
+        ]);
+    }
 }

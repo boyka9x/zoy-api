@@ -107,7 +107,7 @@ export const ShopController = {
                 return clientError(ctx, 400, 'Invalid domain');
             }
 
-            const shop = await ShopService.findOne({ domain }, { password: 0, shopify_token: 0, pixel_id: 0 });
+            const shop = await ShopService.findOne({ domain }, { password: 0, shopify_token: 0 });
             if (!shop) {
                 return clientError(ctx, 400, 'Invalid domain');
             }

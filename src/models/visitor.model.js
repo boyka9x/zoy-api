@@ -10,6 +10,7 @@ const VisitorSchema = new Schema({
     location: { type: String },
     ips: [{ type: String }],
     lastActive: { type: Date },
+    display_id: { type: Number },
 
     shop: { type: Schema.Types.ObjectId, ref: 'shops' },
 }, {

@@ -42,4 +42,74 @@ export const SessionService = {
     count: (filter = {}) => {
         return SessionModel.countDocuments(filter);
     },
+    groupByDate: ({ shopId }) => {
+        return SessionModel.aggregate([
+            Aggregate.match({
+                shop: shopId,
+            }),
+            Aggregate.facet({
+                byDate: [
+                    Aggregate.group({
+                        _id: {
+                            year: { $year: "$createdAt" },
+                            month: { $month: "$createdAt" },
+                            day: { $dayOfMonth: "$createdAt" }
+                        },
+                        count: { $sum: 1 }
+                    }),
+                    Aggregate.project({
+                        _id: 0,
+                        date: {
+                            $dateFromParts: {
+                                year: "$_id.year",
+                                month: "$_id.month",
+                                day: "$_id.day"
+                            }
+                        },
+                        count: 1
+                    }),
+                    Aggregate.sort({ date: 1 }),
+                ],
+                total: [{ $count: "totalSessions" }]
+            }),
+            Aggregate.project({
+                byDate: 1,
+                total: { $arrayElemAt: ["$total.totalSessions", 0] }
+            })
+        ]);
+    },
+    analytic: ({ shopId }) => {
+        return SessionModel.aggregate([
+            Aggregate.match({ shop: shopId }),
+            Aggregate.facet({
+                os: [
+                    { $group: { _id: '$os', count: { $sum: 1 } } },
+                    { $sort: { count: -1 } }
+                ],
+                device: [
+                    { $group: { _id: '$device', count: { $sum: 1 } } },
+                    { $sort: { count: -1 } }
+                ],
+                browser: [
+                    { $group: { _id: '$browser', count: { $sum: 1 } } },
+                    { $sort: { count: -1 } }
+                ],
+                location: [
+                    { $group: { _id: '$location', count: { $sum: 1 } } },
+                    { $sort: { count: -1 } }
+                ]
+            })
+        ]);
+    },
+    groupBySource: ({ shopId }) => {
+        return SessionModel.aggregate([
+            Aggregate.match({ shop: shopId }),
+            Aggregate.group({
+                _id: "$source.url",
+                count: { $sum: 1 },
+                type: { $first: "$source.type" }
+            }),
+            Aggregate.sort({ count: -1 }),
+        ]);
+    }
 }
