@@ -111,5 +111,8 @@ export const SessionService = {
             }),
             Aggregate.sort({ count: -1 }),
         ]);
-    }
+    },
+    findOneByKey: ({ shopId, key }) => {
+        return SessionModel.findOne({ shop: shopId, key });
+    },
 }
