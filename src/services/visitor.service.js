@@ -55,8 +55,8 @@ export const VisitorService = {
             Aggregate.sort({ lastActive: -1 }),
             Aggregate.lookup({
                 from: 'sessions',
-                localField: 'key',
-                foreignField: 'key',
+                localField: '_id',
+                foreignField: 'visitor',
                 as: 'session',
             }),
             Aggregate.project({
