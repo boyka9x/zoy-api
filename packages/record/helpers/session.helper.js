@@ -2,6 +2,14 @@ import { v4 } from "uuid";
 import { HOTA_BODY, SESSION_FIRST_PING, SESSION_KEY, SESSION_LAST_ACTIVE, SOURCE_KEY } from "../constants/record.constant";
 import { encodeBody, getLocalStorage, setLocalStorage } from "./common.helper";
 import { SERVER_URL } from "../constants/host.constant";
+import rrwebRecord from '../../rrweb/record/index';
+
+export const loadRRWeb = (callback) => {
+    window.rrwebRecord = rrwebRecord;
+    if (rrwebRecord && window.rrwebRecord) {
+        callback();
+    }
+};
 
 export const createNewSession = () => {
     const value = v4();
@@ -115,6 +123,10 @@ export const saveBeaconEvents = (recordState) => {
     const eventLength = recordState.events.length;
     if (!eventLength || eventLength <= 0) return;
 
+    const eventBody = encodeBody({
+        events: recordState.events,
+    });
+
     const invalidFirstPing = checkInvalidFirstPing(recordState.events);
     if (!invalidFirstPing) {
         recordState.block = true;
@@ -124,6 +136,7 @@ export const saveBeaconEvents = (recordState) => {
 
     recordState.saving = true;
     recordState.events.splice(0, eventLength);
+    console.log(eventBody)
     fetch(recordState.pingUrl, {
         method: 'POST',
         keepalive: true,
@@ -131,9 +144,7 @@ export const saveBeaconEvents = (recordState) => {
             'Content-Encoding': 'gzip',
             'Content-Type': 'application/json'
         },
-        body: encodeBody({
-            events: recordState.events,
-        }),
+        body: eventBody,
     })
         .then((res) => res.json())
         .then((data) => {

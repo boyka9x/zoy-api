@@ -16,13 +16,13 @@ export const PageviewService = {
         return PageviewModel.find({ session: sessionId, hmTime: { $ne: 1 } }).limit(limit);
     },
     findByPage: async ({ shopId, href, device, limit = 5 }) => {
-        const THIRTY_MINUTES_AGO = new Date(Date.now() - 30 * 60 * 1000);
+        // const THIRTY_MINUTES_AGO = new Date(Date.now() - 30 * 60 * 1000);
 
         return PageviewModel.aggregate([
             Aggregate.match({
                 shop: shopId,
-                href: { $regex: href, $options: 'i' },
-                // hmTime: { $ne: 1 }
+                href: href,
+                hmTime: { $ne: 1 }
             }),
             Aggregate.lookup({
                 from: 'sessions',
@@ -35,6 +35,7 @@ export const PageviewService = {
                 'session.device': device,
                 // 'session.lastActive': { $gte: THIRTY_MINUTES_AGO },
             }),
+            Aggregate.sort({ _id: -1 }),
             Aggregate.limit(limit),
         ]);
     },

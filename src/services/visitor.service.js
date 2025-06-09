@@ -47,7 +47,7 @@ export const VisitorService = {
             })
         ]);
     },
-    findAll: ({ shopId }) => {
+    findAll: ({ shopId, limit = 6, skip = 0 }) => {
         return VisitorModel.aggregate([
             Aggregate.match({
                 shop: shopId,
@@ -59,6 +59,8 @@ export const VisitorService = {
                 foreignField: 'visitor',
                 as: 'session',
             }),
+            Aggregate.skip(skip),
+            Aggregate.limit(limit),
             Aggregate.project({
                 _id: 1,
                 key: 1,
@@ -70,7 +72,11 @@ export const VisitorService = {
                 lastActive: 1,
                 display_id: 1,
                 sessionCount: { $size: '$session' },
+                session: 1,
             }),
         ]);
+    },
+    count: (filter) => {
+        return VisitorModel.countDocuments(filter);
     }
 }

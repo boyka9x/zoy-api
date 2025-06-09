@@ -44,6 +44,7 @@ export const initKey = (states) => {
 
     window.addEventListener(CREATE_PAGE, () => {
         states.pageview = loadPageviewKey();
+        console.log("page")
         window.zoy = { ...states };
     });
 

@@ -6,21 +6,35 @@ const __filename = import.meta.url;
 export const SessionController = {
     findAll: async (ctx) => {
         const { _id, domain } = ctx.state.shopData;
-        const { page, limit } = ctx.request.query;
+        const { page, limit, date } = ctx.request.query;
 
         try {
             const _page = isNaN(page) ? 1 : parseInt(page);
             const _limit = isNaN(limit) ? 10 : parseInt(limit);
-            const sessions = await SessionService.find({ shop: _id }, { skip: (_page - 1) * _limit, limit: _limit }).sort({ lastActive: -1 });
 
-            const total = await SessionService.count({ shop: _id });
+            const query = { shop: _id };
+
+            if (date !== "null") {
+                const start = new Date(date);
+                start.setHours(0, 0, 0, 0);
+                const end = new Date(date);
+                end.setHours(23, 59, 59, 999);
+                query.lastActive = { $gte: start, $lte: end };
+            }
+
+            const sessions = await SessionService.find(query, {
+                skip: (_page - 1) * _limit,
+                limit: _limit,
+            }).sort({ lastActive: -1 });
+
+            const total = await SessionService.count(query);
 
             ctx.body = {
                 data: sessions,
                 page: _page,
                 limit: _limit,
                 total,
-            }
+            };
         } catch (error) {
             Logger.error(__filename, domain, error.message);
             ctx.throw(error.status, error.message);

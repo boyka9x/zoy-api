@@ -84,6 +84,7 @@ export const PageviewBuilder = {
                     let hmTime;
                     await eventCursor.eachAsync(async (events) => {
                         for (const event of events) {
+                            console.log(events)
                             if (!hmTime || hmTime < event.timestamp) {
                                 hmTime = event.timestamp;
                             }

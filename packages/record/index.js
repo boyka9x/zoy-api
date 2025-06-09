@@ -1,7 +1,7 @@
 import { getReferrer } from "./helpers/common.helper";
 import { initKey } from "./helpers/key.helper";
 import { initPingUrl } from "./helpers/session.helper";
-import { initRecorder } from "./modules/record.module";
+import { loadRecorder } from "./modules/record.module";
 
 const initialRecord = (() => {
     const states = {
@@ -30,7 +30,7 @@ const initialRecord = (() => {
             initPingUrl(states);
 
             // Load rrweb
-            initRecorder(states);
+            loadRecorder(states);
         } catch (error) {
             states.logs.push(error);
         }

@@ -1,5 +1,5 @@
 import { Logger } from "../helpers/index.js";
-import { EventService, PageviewService } from "../services/index.js";
+import { EventService, PageviewService, SessionService } from "../services/index.js";
 
 const __filename = import.meta.url;
 
@@ -9,6 +9,8 @@ export const EventController = {
 
         try {
             const events = await EventService.findBySession(sessionId);
+
+            await SessionService.updateOne(sessionId, { viewed: true });
 
             ctx.body = {
                 data: events
