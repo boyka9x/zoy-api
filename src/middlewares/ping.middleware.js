@@ -1,5 +1,5 @@
 import { AgentHelper } from "../helpers/index.js";
-import { ShopService } from "../services/index.js";
+import { SessionService, ShopService } from "../services/index.js";
 import geoip from 'geoip-lite';
 
 export const verifyParams = async (ctx, next) => {
@@ -75,6 +75,13 @@ export const verifyAgent = async (ctx, next) => {
 
 export const verifyQuota = async (ctx, next) => {
     const { zoy, shopData } = ctx.state;
+
+    if (shopData.session_count >= shopData?.pricing?.session_limit) {
+        const session = await SessionService.findOneByKey({ shopId: shopData?._id, key: zoy.sKey });
+        if (!session) {
+            ctx.throw("Limit quota");
+        }
+    }
 
     if (zoy.domain) {
         return await next();
